@@ -1,0 +1,18 @@
+num of threads 1
+Time taken: 20.194941 sec.
+------------
+num of threads 2
+Time taken: 8.824922 sec.
+------------
+num of threads 4
+Time taken: 6.531200 sec.
+------------
+num of threads 8
+Time taken: 5.710285 sec.
+------------
+num of threads 16
+Time taken: 7.139379 sec.
+------------
+num of threads 32
+Time taken: 8.882075 sec.
+------------
