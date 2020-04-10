@@ -26,8 +26,8 @@ int main() {
 	float *A = (float*)malloc(size * size * sizeof(float));
 	float x[size], b[size], y[size], Ay[size], tmp[size];
 
-	FILE *inA = fopen("matA.bin", "rb");
-	FILE *inB = fopen("vecB.bin", "rb");
+	FILE *inA = fopen("inData/matA.bin", "rb");
+	FILE *inB = fopen("inData/vecB.bin", "rb");
 	fread(A, sizeof(float), size * size, inA);
 	fread(b, sizeof(float), size, inB);	
 	fclose(inA);
@@ -111,7 +111,7 @@ int main() {
 	clock_gettime(CLOCK_MONOTONIC_RAW, &end);
 	printf("Time taken: %lf sec.\n",end.tv_sec-start.tv_sec+ 0.000000001*(end.tv_nsec-start.tv_nsec));
 
-	FILE *inX = fopen("vecX.bin", "rb");
+	FILE *inX = fopen("inData/vecX.bin", "rb");
 	fread(tmp, sizeof(float), size, inX);
 	fclose(inX);
 
