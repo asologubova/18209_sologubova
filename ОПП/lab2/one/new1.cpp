@@ -34,8 +34,8 @@ void sumVec(float *res, float *vec1, float *vec2, int size) {
 	}
 }
 
-float scalarProduct(float *vec1, float *vec2, int size) {
-	float res = 0;
+double scalarProduct(float *vec1, float *vec2, int size) {
+	double res = 0;
 	int i = 0;
 	#pragma omp parallel for reduction(+: res)
 	for (i = 0; i < size; i++) {
@@ -43,7 +43,6 @@ float scalarProduct(float *vec1, float *vec2, int size) {
 	}
 	return res;
 }
-
 void matrixVecMul(float *res, float *matrix, float *vec, int size) {
 	int i = 0, j = 0;
 	#pragma omp parallel for
@@ -51,7 +50,7 @@ void matrixVecMul(float *res, float *matrix, float *vec, int size) {
 		res[i] = 0;
 		for (j = 0; j < size; j++){
 			//res[i] += (*(vec + j)) * (*(matrix + i * size + j));
-			res[i] += vec[j] * matrix[i * size + j];
+			res[i] = vec[i] * matrix[i * size + j];
 		}
 	}
 }
@@ -86,8 +85,8 @@ int main() {
 
 	int i = 0, j = 0;
 
-	FILE *inA = fopen("inData/matA.bin", "rb");
-	FILE *inB = fopen("inData/vecB.bin", "rb");
+	FILE *inA = fopen("matA.bin", "rb");
+	FILE *inB = fopen("vecB.bin", "rb");
 	fread(A, sizeof(float), size * size, inA);
 	fread(b, sizeof(float), size, inB);	
 	fclose(inA);
@@ -101,55 +100,34 @@ int main() {
 
     	matrixVecMul(y, A, x, size);  //y = Ax
 	minusVec(y, y, b, size);   //y = Ax - b	
-	float lenY = vectorModule(y, size);
-	float lenB = vectorModule(b, size);
 
-   	while (lenY/lenB >= E){
+   	while ((vectorModule(y, size)/vectorModule(b, size)) >= E){
         	matrixVecMul(Ay, A, y, size); //Ay
-		float scalAy = scalarProduct(Ay, Ay, size);
-        	if(scalAy  == 0) 
+        	if(scalarProduct(Ay, Ay, size) == 0) 
 			break;
-        	tau = scalarProduct(y, Ay, size) / scalAy;
-		mulAndSumVectors(x, 1, x, (-1) * tau, y, size);  //x(n+1) = x - tau *  y;
+        	tau = scalarProduct(y, Ay, size) / scalarProduct(Ay, Ay, size);
+		mulAndSumVectors(x, 1, x, (-1) * tau, y, size);
 		matrixVecMul(y, A, x, size);  //y = Ax(n+1)
 		minusVec(y, y, b, size);   //y = Ax(n+1) - b
-		lenY = vectorModule(y, size);
 	}
 
 	clock_gettime(CLOCK_MONOTONIC_RAW, &end);
 	printf("Time taken: %lf sec.\n",end.tv_sec-start.tv_sec+ 0.000000001*(end.tv_nsec-start.tv_nsec));
 
-	FILE *inX = fopen("inData/vecX.bin", "rb");
+	FILE *inX = fopen("vecX.bin", "rb");
 	fread(tmp, sizeof(float), size, inX);
-	fclose(inX);
 	float difference = -1;
 	for (i = 0; i < size; i++){
-		float d = abs(tmp[i] - x[i]);
+		double d = abs(tmp[i] - x[i]);
 		if (d > difference) difference = d;
 		//printf("x[%d] dif: %lf\n", i, d);
 	}
 	//printVec(x, size);
-	printf("difference = %lf\n", difference);
+	printf("%lf\n", difference);
+	fclose(inX);
+
 
 	free(A);
 
     	return 0;
 }
-
-
-//заполнение мартицы и векторов начальными значениями
-/*	for (i = 0; i < size; i++) {
-		for (j = 0; j < size; j++) {
-			if(i == j) A[i * size + j] = 2;
-			else A[i * size + j] = 1;
-		}
-	}
-	for (i = 0; i < size; i++) {
-		x[i] = 0;
-		//tmp[i] = 0;
-	}
-	for (i = 0; i < size; i++) {
-		b[i] = size + 1;
-	}
-*/
-

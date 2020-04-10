@@ -6,7 +6,7 @@
 cd $PBS_O_WORKDIR
 source /opt/intel/composerxe/bin/compilervars.sh intel64
 
-for i in 1 2 4 8 16 32 
+for i in 1 2 4 8 12 
 do
 	export OMP_NUM_THREADS=$i
 	echo num of threads $OMP_NUM_THREADS

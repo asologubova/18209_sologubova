@@ -54,20 +54,21 @@ int main() {
 				scal1 = 0;
 				scal2 = 0;
 				tau = 0;
+				lenY = 0;
 			}
 			#pragma omp for
 			for (i = 0; i < size; i++){
 				y[i] = 0;
 				for (j = 0; j < size; j++){
-					y[i] += (*(x + j)) * (*(A + i * size + j));
-					//y[i] += x[j] * A[i * size + j];
+					y[i] += (*(A + i * size + j)) * (*(x + j));
+					//y[i] += A[i * size + j] * x[j];
 				}
 			}
 			#pragma omp for
 			for (i = 0; i < size; i++) {
 				y[i] = y[i] - b[i];
 			}
-			#pragma omp for
+			#pragma omp for reduction(+: lenY)
 			for (i = 0; i < size; i++) {
 				lenY += (y[i] * y[i]);
 			}
@@ -75,13 +76,17 @@ int main() {
 			for (i = 0; i < size; i++){
 				Ay[i] = 0;
 				for (j = 0; j < size; j++){
-					Ay[i] += (*(y + j)) * (*(A + i * size + j));
-					//Ay[i] += y[j] * A[i * size + j];
+					Ay[i] += (*(A + i * size + j)) * (*(y + j));
+					//Ay[i] += A[i * size + j] * y[j];
 				}
 			}
 			#pragma omp for reduction(+: scal1)
 			for (i = 0; i < size; i++) {
 				scal1 += (y[i] * Ay[i]);
+			}
+			#pragma omp single
+			{
+				scal1 = scal1;			
 			}
 			#pragma omp for reduction(+: scal2)
 			for (i = 0; i < size; i++) {
@@ -108,7 +113,9 @@ int main() {
 
 	FILE *inX = fopen("vecX.bin", "rb");
 	fread(tmp, sizeof(float), size, inX);
-	double difference = -1;
+	fclose(inX);
+
+/*	float difference = -1;
 	for (i = 0; i < size; i++){
 		double d = abs(tmp[i] - x[i]);
 		if (d > difference) difference = d;
@@ -116,8 +123,7 @@ int main() {
 	}
 	//printVec(x, size);
 	printf("%lf\n", difference);
-	fclose(inX);
-
+*/
 	free(A);
 
     	return 0;
@@ -139,4 +145,6 @@ int main() {
 		b[i] = size + 1;
 	}
 */
+
+
 
