@@ -2,6 +2,7 @@
 
 #PBS -l walltime=00:05:00
 #PBS -l select=1:ncpus=8:ompthreads=8
+#PBS -q S1995178
 
 cd $PBS_O_WORKDIR
 source /opt/intel/composerxe/bin/compilervars.sh intel64

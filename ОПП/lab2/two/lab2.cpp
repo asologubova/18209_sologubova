@@ -22,7 +22,6 @@ int main() {
     	int size = N;
 	float E = Eps;
 	float tau = 0.01;
-	float alpha = 0, betta = 0;
 	float *A = (float*)malloc(size * size * sizeof(float));
 	float x[size], b[size], y[size], Ay[size], tmp[size];
 

@@ -1,0 +1,12 @@
+num of threads 4
+
+without
+Time taken: 6.597897 sec.
+static (625)
+Time taken: 5.936791 sec.
+dynamic (4)
+Time taken: 6.081166 sec.
+guided
+Time taken: 8.169257 sec.
+runtime
+Time taken: 7.057468 sec.
