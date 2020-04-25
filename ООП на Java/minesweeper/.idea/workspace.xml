@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="2d141fcd-0a83-436d-9a1c-31f99bdd7abf" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectId" id="1XstHy0AyAmoNHn38Lwx0rlEKFY" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors" />
+  </component>
+  <component name="RunManager">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="ru.nsu.ccfit.sologubova.minesweeper.Main" />
+      <module name="minesweeper" />
+      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Main" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration>C:\Users\Asus\AppData\Roaming\Subversion</configuration>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="2d141fcd-0a83-436d-9a1c-31f99bdd7abf" name="Default Changelist" comment="" />
+      <created>1581846545065</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1581846545065</updated>
+      <workItem from="1581846547010" duration="106000" />
+      <workItem from="1581846778272" duration="75000" />
+      <workItem from="1582370133953" duration="577000" />
+      <workItem from="1582370747743" duration="14270000" />
+      <workItem from="1582872792204" duration="1635000" />
+      <workItem from="1582948655117" duration="4350000" />
+      <workItem from="1586954165724" duration="210000" />
+      <workItem from="1587371688323" duration="1896000" />
+      <workItem from="1587376281968" duration="202000" />
+      <workItem from="1587378687041" duration="3540000" />
+      <workItem from="1587456052297" duration="14785000" />
+      <workItem from="1587560071926" duration="10179000" />
+      <workItem from="1587616163296" duration="3919000" />
+      <workItem from="1587745518211" duration="2789000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="488" y="74" key="#com.intellij.ide.util.MemberChooser" timestamp="1587568131689">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="488" y="74" key="#com.intellij.ide.util.MemberChooser/0.0.1366.728@0.0.1366.728" timestamp="1587568131689" />
+    <state x="273" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1587568853761">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="273" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1366.728@0.0.1366.728" timestamp="1587568853761" />
+    <state width="1323" height="96" key="GridCell.Tab.0.bottom" timestamp="1587748334445">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1323" height="96" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1587748334445" />
+    <state width="1323" height="96" key="GridCell.Tab.0.center" timestamp="1587748334445">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1323" height="96" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1587748334445" />
+    <state width="1323" height="96" key="GridCell.Tab.0.left" timestamp="1587748334445">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1323" height="96" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1587748334445" />
+    <state width="1323" height="96" key="GridCell.Tab.0.right" timestamp="1587748334445">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1323" height="96" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1587748334445" />
+    <state width="1323" height="96" key="GridCell.Tab.1.bottom" timestamp="1587748334445">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1323" height="96" key="GridCell.Tab.1.bottom/0.0.1366.728@0.0.1366.728" timestamp="1587748334445" />
+    <state width="1323" height="96" key="GridCell.Tab.1.center" timestamp="1587748334445">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1323" height="96" key="GridCell.Tab.1.center/0.0.1366.728@0.0.1366.728" timestamp="1587748334445" />
+    <state width="1323" height="96" key="GridCell.Tab.1.left" timestamp="1587748334445">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1323" height="96" key="GridCell.Tab.1.left/0.0.1366.728@0.0.1366.728" timestamp="1587748334445" />
+    <state width="1323" height="96" key="GridCell.Tab.1.right" timestamp="1587748334445">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1323" height="96" key="GridCell.Tab.1.right/0.0.1366.728@0.0.1366.728" timestamp="1587748334445" />
+    <state x="146" y="15" key="SettingsEditor" timestamp="1587372334022">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="146" y="15" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1587372334022" />
+    <state x="391" y="193" key="com.intellij.ide.util.TipDialog" timestamp="1587616163378">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="391" y="193" key="com.intellij.ide.util.TipDialog/0.0.1366.728@0.0.1366.728" timestamp="1587616163378" />
+    <state x="65" y="0" key="new project wizard" timestamp="1587373937092">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="65" y="0" key="new project wizard/0.0.1366.728@0.0.1366.728" timestamp="1587373937092" />
+  </component>
+  <component name="XDebuggerManager">
+    <watches-manager>
+      <configuration name="Application">
+        <watch expression="ok" />
+      </configuration>
+    </watches-manager>
+  </component>
+</project>
