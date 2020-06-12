@@ -10,32 +10,28 @@
 
 //metod minimalnih nevyazok
 
-void mulScalar(float *res, float scalar, float *vec, int size)
-{
+void mulScalar(float *res, float scalar, float *vec, int size){
 	int i = 0;
 	for (i = 0; i < size; i++) {
 		res[i] = vec[i] * scalar;
 	}
 }
 
-void minusVec(float *res, float *vec1, float *vec2, int size) 
-{
+void minusVec(float *res, float *vec1, float *vec2, int size) {
 	int i = 0;
 	for (i = 0; i < size; i++) {
 		res[i] = vec1[i] - vec2[i];
 	}
 }
 
-void sumVec(float *res, float *vec1, float *vec2, int size) 
-{
+void sumVec(float *res, float *vec1, float *vec2, int size) {
 	int i = 0;
 	for (i = 0; i < size; i++) {
 		res[i] = vec1[i] + vec2[i];
 	}
 }
 
-float scalarProduct(float *vec1, float *vec2, int size) 
-{
+float scalarProduct(float *vec1, float *vec2, int size) {
 	float res = 0;
 	int i = 0;
 	for (i = 0; i < size; i++) {
@@ -45,10 +41,9 @@ float scalarProduct(float *vec1, float *vec2, int size)
 }
 
 void matrixVecMul(float *res, float *matrix, float *vec, 
-			int size, int rank, int shift) 
-{
+			int size, int rank, int count) {
 	int i = 0, j = 0;
-	for (i = 0; i < shift; i++){
+	for (i = 0; i < count; i++){
 		res[i] = 0;
 		for (j = 0; j < size; j++){
 			res[i] += vec[j] * matrix[i * size + j];
@@ -57,16 +52,14 @@ void matrixVecMul(float *res, float *matrix, float *vec,
 }
 
 void mulAndSumVectors(float *res, float scal1, float *vec1, float scal2, 
-			float *vec2, int size)
-{
+			float *vec2, int size){
 	int i;
 	for (i = 0; i < size; i++){
 		res[i] = scal1 * vec1[i] + scal2 * vec2[i];
 	}
 }
 
-void fullData(float *A, float *b, float *x, int size)
-{
+void fullData(float *A, float *b, float *x, int size){
 	FILE *inA = fopen("inData/matA.bin", "rb");
 	FILE *inB = fopen("inData/vecB.bin", "rb");
 
@@ -82,19 +75,21 @@ void fullData(float *A, float *b, float *x, int size)
 	}
 }
 
-int countShift(int *shifts, int rank){
-	int i;
-	int res = 0;
-	for (i = 0; i < rank; i++){
-		res += shifts[i];
-	}
-	return res;
-}
-
 void printVec(float *vec, int size){
 	int i;
 	for (i = 0; i< size; i++){
 		printf("%f ", vec[i]);
+	}
+	printf("\n");
+}
+
+void printMat(float *mat, int row, int col){
+	int i, j;
+	for (i = 0; i < row; i++){
+		for (j = 0; j < col; j++){
+			printf("%f ", mat[i * col + j]);
+		}
+		printf("\n");
 	}
 	printf("\n");
 }
@@ -109,27 +104,35 @@ int main() {
   	MPI_Init(NULL, NULL);
   	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
   	MPI_Comm_size(MPI_COMM_WORLD, &commSize);
-	int shift = size / commSize;
+	int count = size / commSize;
 	int remainder = size % commSize;
 	MPI_Status status;
 
 	int i = 0, r = 1, j = 0;
-	double time_begin, time_end;
-
-	int *shifts = (int*)malloc(sizeof(int) * commSize);
+	double time_start, time_end;
 	
 	float *A;
+	float *A_part;
 	float *x = (float*)malloc(sizeof(float) * size);
 	float *b = (float*)malloc(sizeof(float) * size);
 	float *y = (float*)malloc(sizeof(float) * size);
 
-	for (i = 0, r = 1; i < commSize; i++, r++){
-		shifts[i] = shift + (r <= remainder ? 1 : 0);
-		if (rank == 0)
-			printf("shifts[%d] = %d :-)\n", i, shifts[i]);
-	}
+	int *countsMat = (int*)malloc(sizeof(int) * commSize);
+	int *offsetsMat = (int*)malloc(sizeof(int) * commSize);
+	int *countsVec = (int*)malloc(sizeof(int) * commSize);
+	int *offsetsVec = (int*)malloc(sizeof(int) * commSize);
 
-	float *tmp = (float*)malloc(sizeof(float) * shifts[rank]);
+	int offsetMat = 0, offsetVec = 0;
+	for (i = 0, r = 1; i < commSize; i++, r++){
+		countsMat[i] = (count + (r <= remainder ? 1 : 0)) * size;
+		countsVec[i] = count + (r <= remainder ? 1 : 0);
+
+		offsetsMat[i] = offsetMat;
+		offsetMat += countsMat[i];
+		offsetsVec[i] = offsetVec;
+		offsetVec += countsVec[i];
+	}
+	A_part = (float*)malloc(sizeof(float) * countsMat[rank]);
 
 	if (rank == 0){
 		A = (float*)malloc(sizeof(float) * size * size);
@@ -141,118 +144,57 @@ int main() {
 			b[i] = size + 1;
 			x[i] = 0;
 		}*/
-
-		for (i = 1; i < commSize; i++){
-			if(i >= remainder){
-				MPI_Send(A + size * countShift(shifts, i), size * shifts[i], MPI_FLOAT, i, 0, MPI_COMM_WORLD);
-			}
-			else {
-				MPI_Send(A + size * countShift(shifts, i), size * shifts[i], MPI_FLOAT, i, 0, MPI_COMM_WORLD);
-			}
-		}
-	}			
-	else {
-		A = (float*)malloc(sizeof(float) * size * shifts[rank]);
-		MPI_Recv(A, size * shifts[rank], MPI_FLOAT, 0, 0, MPI_COMM_WORLD, &status);
 	}
-	MPI_Barrier(MPI_COMM_WORLD);
 
 	MPI_Bcast(b, size, MPI_FLOAT, 0, MPI_COMM_WORLD);
 	MPI_Bcast(x, size, MPI_FLOAT, 0, MPI_COMM_WORLD);
 
-	MPI_Barrier(MPI_COMM_WORLD);
+	MPI_Scatterv(A, countsMat, offsetsMat, MPI_FLOAT, A_part, countsMat[rank], MPI_FLOAT, 0, MPI_COMM_WORLD);
 
 	if (rank == 0){
-		time_begin = MPI_Wtime();
+		time_start = MPI_Wtime();
 	}
 
+	float *tmp = (float*)malloc(sizeof(float) * countsVec[rank]);
 	int k = 0;
 	while(1){
 		k++;
-		matrixVecMul(tmp, A, x, size, rank, shifts[rank]);  //y = Ax
-		minusVec(tmp, tmp, b + countShift(shifts, rank), shifts[rank]);  //y = Ax - b
+		matrixVecMul(tmp, A_part, x, size, rank, countsVec[rank]);  //y = Ax 
+		minusVec(tmp, tmp, b + offsetsVec[rank], countsVec[rank]);  //y = Ax - b
 
-		MPI_Barrier(MPI_COMM_WORLD);
-
-		//собрать y по кусочкам
-		
-		if (rank == 0){
-			for (i = 0; i < shifts[0]; i++){
-				y[i] = tmp[i];
-			}
-			for (i = 1; i < commSize; i++){
-				MPI_Recv(y + countShift(shifts, i), shifts[i], MPI_FLOAT, i, i, MPI_COMM_WORLD, &status); //y
-			}
-		}
-		else {
-			MPI_Send(tmp, shifts[rank], MPI_FLOAT, 0, rank, MPI_COMM_WORLD); //y
-		}	
-
-		MPI_Bcast(y, size, MPI_FLOAT, 0, MPI_COMM_WORLD);
-
+		MPI_Allgatherv(tmp, countsVec[rank], MPI_FLOAT, y, countsVec, offsetsVec, MPI_FLOAT, MPI_COMM_WORLD);
 		float sumY = 0, sumB = 0;
-		float scalY = scalarProduct(tmp, tmp, shifts[rank]);
-		float scalB = scalarProduct(b + countShift(shifts, rank), b + countShift(shifts, rank), shifts[rank]);
-
-		MPI_Barrier(MPI_COMM_WORLD);
+		float scalY = scalarProduct(tmp, tmp, countsVec[rank]);
+		float scalB = scalarProduct(b + offsetsVec[rank], b + offsetsVec[rank], countsVec[rank]);
 
 		MPI_Allreduce(&scalY, &sumY, 1, MPI_FLOAT, MPI_SUM, MPI_COMM_WORLD);
 		MPI_Allreduce(&scalB, &sumB, 1, MPI_FLOAT, MPI_SUM, MPI_COMM_WORLD);
 		float cond = sqrt(sumY / sumB);
 
-		//...
-
 		if (cond < E){
 			break;
 		}
-
-		//...
-
-		matrixVecMul(tmp, A, y, size, rank, shifts[rank]);  //Ay
-		
-		float scalAy = scalarProduct(tmp, tmp, shifts[rank]);
+		matrixVecMul(tmp, A_part, y, size, rank, countsVec[rank]);  //Ay
+		float scalAy = scalarProduct(tmp, tmp, countsVec[rank]);
 		float sumAyAy = 0, sumYAy = 0;
-
-		MPI_Barrier(MPI_COMM_WORLD);
-
 		MPI_Allreduce(&scalAy, &sumAyAy, 1, MPI_FLOAT, MPI_SUM, MPI_COMM_WORLD);
+		
 		if(sumAyAy == 0){
 			printf("Denominator is NULL");
 			break;
 		}
-
-		float scalYAy = scalarProduct(tmp, y + countShift(shifts, rank), shifts[rank]);
-
-		MPI_Barrier(MPI_COMM_WORLD);
+		float scalYAy = scalarProduct(tmp, y + offsetsVec[rank], countsVec[rank]);
 
 		MPI_Allreduce(&scalYAy, &sumYAy, 1, MPI_FLOAT, MPI_SUM, MPI_COMM_WORLD);
-
 		float tau = sumYAy / sumAyAy;
 
-		mulAndSumVectors(tmp, 1, x + countShift(shifts, rank), (-1) * tau, y + countShift(shifts, rank), shifts[rank]);  //x(n+1) = x - tau *  y;
-
-		MPI_Barrier(MPI_COMM_WORLD);
-
-		//собрать x по кусочкам
-		if (rank == 0){
-			for (i = 0; i < shifts[0]; i++){
-				x[i] = tmp[i];
-			}
-			for (i = 1; i < commSize; i++){
-				MPI_Recv(x + countShift(shifts, i), shifts[i], MPI_FLOAT, i, i, MPI_COMM_WORLD, &status); //x
-			}
-		}
-		else {
-			MPI_Send(tmp, shifts[rank], MPI_FLOAT, 0, rank, MPI_COMM_WORLD); //x
-		}
-
-		MPI_Bcast(x, size, MPI_FLOAT, 0, MPI_COMM_WORLD);
+		mulAndSumVectors(tmp, 1, x + offsetsVec[rank], (-1) * tau, y + offsetsVec[rank], countsVec[rank]);  //x(n+1) = x - tau *  y;
+		MPI_Allgatherv(tmp, countsVec[rank], MPI_FLOAT, x, countsVec, offsetsVec, MPI_FLOAT, MPI_COMM_WORLD);
 	}
-
 
 	if (rank == 0){
 		time_end = MPI_Wtime();
-		double worktime = time_end-time_begin;
+		double worktime = time_end - time_start;
 		printf("Time: %lf sec\n", worktime);
 
 		float *fileX = (float*)malloc(sizeof(float) * size);
@@ -270,14 +212,18 @@ int main() {
 		printf("difference = %lf\n", difference);
 
 		free(fileX);
+		free(A);
 	}
 
-	free(A);
+	free(A_part);
 	free(x);
 	free(b);
 	free(y);
 	free(tmp);
-	free(shifts);
+	free(countsMat);
+	free(countsVec);
+	free(offsetsMat);
+	free(offsetsVec);
 	
 	MPI_Finalize();
 

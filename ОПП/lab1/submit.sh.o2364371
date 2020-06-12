@@ -1,0 +1,13 @@
+Number of MPI process: 8
+File $PBS_NODEFILE:
+cn201.hpc.nusc.ru
+cn201.hpc.nusc.ru
+cn201.hpc.nusc.ru
+cn201.hpc.nusc.ru
+cn201.hpc.nusc.ru
+cn201.hpc.nusc.ru
+cn201.hpc.nusc.ru
+cn201.hpc.nusc.ru
+
+Time: 24.775620 sec
+difference = 0.000000

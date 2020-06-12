@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #PBS -l walltime=00:03:00
-#PBS -l select=1:ncpus=2:mpiprocs=2:mem=4000m
+#PBS -l select=1:ncpus=8:mpiprocs=8:mem=4000m
 ##PBS -q S1995178
 ##PBS -m n
 

@@ -1,7 +1,7 @@
 #!/bin/sh
  
 #PBS -l walltime=00:02:00
-#PBS -l select=2:ncpus=8:mpiprocs=8:mem=4000m
+#PBS -l select=2:ncpus=8:mpiprocs=8:mem=2000m,place=free
  
 cd $PBS_O_WORKDIR
  
