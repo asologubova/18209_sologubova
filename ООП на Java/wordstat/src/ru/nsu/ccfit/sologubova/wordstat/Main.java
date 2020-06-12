@@ -18,14 +18,11 @@ public class Main {
             System.err.println("Error while reading file: " + e.getLocalizedMessage());
         }
         finally {
-            if (null != reader)
-            {
-                try
-                {
+            if (null != reader){
+                try {
                     reader.close();
                 }
-                catch (IOException e)
-                {
+                catch (IOException e) {
                     e.printStackTrace(System.err);
                 }
             }
